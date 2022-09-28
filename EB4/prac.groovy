@@ -3,17 +3,18 @@ Semaphore a = new Semaphore(2)
 Semaphore b = new Semaphore(0)
 
 Thread.start {
+    
+
     print("A")
-    // a.release()
     print("B")
-    // b.acquire()
     print("C")
+    a.release(2)
+
 } 
 Thread.start {
-    
+    a.acquire(2)
     print("B")
-    a.acquire()
     print("F")
-    b.release()
     print("G")
+    
 }

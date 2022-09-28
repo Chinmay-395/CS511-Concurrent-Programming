@@ -10,11 +10,14 @@ N.times{
             //barrier arrival protocol
 
             mutex.acquire()
-            t++;
-            
-            if(t==N){
-                N.times{barrier.release()}
+            if(t==N) {barrier.release()}//we dont want to use ```N.times{barrier.release()}``` because it will cause too many releases which will overflow int the stack
+            else{
+                t++;
+                if(t==N){
+                    N.times{barrier.release()}
+                }
             }
+            
 
             mutex.release()
             //barrier
