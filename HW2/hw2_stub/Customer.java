@@ -1,7 +1,3 @@
-
-//Jack Schneiderhan and Cindy Zhang
-//I pledge my honor that I have abided by the Stevens Honor System.
-// 10-6-2021
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +18,8 @@ public class Customer implements Runnable {
         this.bakery = bakery;
         this.shoppingCart = new ArrayList<BreadType>();
         this.rnd = new Random();
-        this.shopTime = rnd.nextInt(5);
-        this.checkoutTime = rnd.nextInt(5);
+        this.shopTime = rnd.nextInt(7);
+        this.checkoutTime = rnd.nextInt(7);
         fillShoppingCart();
     }
 
@@ -32,43 +28,45 @@ public class Customer implements Runnable {
      */
     public void run() {
         // TODO
-        System.out.println("Customer " + this.hashCode() + " has started shopping!");
+        System.out.println("Customer ID: " + this.hashCode() + " has started shopping!");
         try {
             for (int i = 0; i < shoppingCart.size(); i++) {
                 if (shoppingCart.get(i) == BreadType.RYE) {
-                    this.bakery.shelfType[0].acquire();
+                    this.bakery.breadShelf[0].acquire();
                     this.bakery.takeBread(BreadType.RYE);
-                    System.out.println("Customer " + this.hashCode() + " just took RYE!");
+                    System.out.println("Customer ID: " + this.hashCode() + " Picked rye bread");
                     this.bakery.addSales(BreadType.RYE.getPrice());
-                    System.out.println("Customer " + this.hashCode() + " just bought RYE!");
-                    this.bakery.shelfType[0].release();
+                    System.out.println("Customer ID: " + this.hashCode() + " got rye bread");
+                    this.bakery.breadShelf[0].release();
                 } else if (shoppingCart.get(i) == BreadType.SOURDOUGH) {
-                    this.bakery.shelfType[1].acquire();
+                    this.bakery.breadShelf[1].acquire();
                     this.bakery.takeBread(BreadType.SOURDOUGH);
-                    System.out.println("Customer " + this.hashCode() + " just took SOURDOUGH!");
+                    System.out.println("Customer ID: " + this.hashCode() + " Picked sourdough bread");
                     this.bakery.addSales(BreadType.SOURDOUGH.getPrice());
-                    System.out.println("Customer " + this.hashCode() + " just bought SOURDOUGH!");
-                    this.bakery.shelfType[1].release();
+                    System.out.println("Customer ID: " + this.hashCode() + " got sourdough bread");
+                    this.bakery.breadShelf[1].release();
                 } else {
-                    this.bakery.shelfType[2].acquire();
+                    this.bakery.breadShelf[2].acquire();
                     this.bakery.takeBread(BreadType.WONDER);
-                    System.out.println("Customer " + this.hashCode() + " just took WONDER!");
+                    System.out.println("Customer ID: " + this.hashCode() + " Picked wonder bread");
                     this.bakery.addSales(BreadType.WONDER.getPrice());
-                    System.out.println("Customer " + this.hashCode() + " just bought WONDER!");
-                    this.bakery.shelfType[2].release();
+                    System.out.println("Customer ID: " + this.hashCode() + " got wonder bread");
+                    this.bakery.breadShelf[2].release();
                 }
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        System.out.println("Customer " + this.hashCode() + " is leaving, bye!");
+        System.out.println("Customer ID: " + this.hashCode() + " total checkout price " + this.getItemsValue());
+        System.out.println("Customer ID: " + this.hashCode() + " completed");
     }
 
     /**
      * Return a string representation of the customer
      */
     public String toString() {
-        return "Customer " + hashCode() + ": shoppingCart=" + Arrays.toString(shoppingCart.toArray()) + ", shopTime="
+        return "Customer ID: " + hashCode() + ": shoppingCart=" + Arrays.toString(shoppingCart.toArray())
+                + ", shopTime="
                 + shopTime + ", checkoutTime=" + checkoutTime;
     }
 
@@ -88,10 +86,10 @@ public class Customer implements Runnable {
      * Fill the customer's shopping cart with 1 to 3 random breads
      */
     private void fillShoppingCart() {
-        int itemCnt = 1 + rnd.nextInt(3);
-        while (itemCnt > 0) {
+        int count = 1 + rnd.nextInt(3);
+        while (count > 0) {
             addItem(BreadType.values()[rnd.nextInt(BreadType.values().length)]);
-            itemCnt--;
+            count--;
         }
     }
 

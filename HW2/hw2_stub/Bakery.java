@@ -1,7 +1,3 @@
-
-//Jack Schneiderhan and Cindy Zhang
-//I pledge my honor that I have abided by the Stevens Honor System.
-// 10-6-2021
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -18,8 +14,7 @@ public class Bakery implements Runnable {
     private float sales = 0;
 
     // TODO
-    Semaphore[] shelfType = { new Semaphore(1), new Semaphore(1), new Semaphore(1) };
-    // shelfType[0], [1], [2] = rye, sourdough, and wonder.
+    Semaphore[] breadShelf = { new Semaphore(1), new Semaphore(1), new Semaphore(1) };
 
     /**
      * Remove a loaf from the available breads and restock if necessary
@@ -29,7 +24,7 @@ public class Bakery implements Runnable {
         if (breadLeft > 0) {
             availableBread.put(bread, breadLeft - 1);
         } else {
-            System.out.println("No " + bread.toString() + " bread left! Restocking...");
+            System.out.println(bread.toString() + " restocking");
             // restock by preventing access to the bread stand for some time
             try {
                 Thread.sleep(1000);
@@ -73,6 +68,6 @@ public class Bakery implements Runnable {
             Thread.currentThread().interrupt();
         }
 
-        System.out.println("Today's total sales: " + this.sales);
+        System.out.println("total sales: " + this.sales);
     }
 }
