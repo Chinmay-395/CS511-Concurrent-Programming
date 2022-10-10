@@ -16,7 +16,7 @@ r=new Random();
         endpointMutexList[myEndpoint].release();
         
         //Cross crossing
-        println("car $it crossing in direction "+myEndpoint+" current totals "+noOfCarsCrossing);
+        println("car " +it+" crossing in direction "+myEndpoint+" current totals "+noOfCarsCrossing);
         
         endpointMutexList[myEndpoint].acquire();
         noOfCarsCrossing[myEndpoint]--;

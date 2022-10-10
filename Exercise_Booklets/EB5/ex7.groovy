@@ -1,8 +1,3 @@
-/*
- Quiz 4B - 6 Oct 2021
-Christian Bautista & Ankit Patel
-I pledge my honor that I have abided by the Stevens Honor System.
- */
 import java.util.concurrent.Semaphore;
 
 Semaphore permToLoad = new Semaphore(1);
@@ -13,10 +8,14 @@ Semaphore mutex = new Semaphore(1,true);
 
 100.times {
     int dir = (new Random()).nextInt(2);
+    
     Thread.start { // PassengerTrain travelling in direction dir
         tracks[dir].acquire();
         mutex.acquire();
+
+        print("passenger trains"+dir+"\n")
         mutex.release();
+        
         tracks[dir].release();
     }
 }
@@ -26,10 +25,14 @@ Semaphore mutex = new Semaphore(1,true);
     Thread.start { // Freight Train travelling in direction dir
         // Make sure that no other trains are in the station
         mutex.acquire();
+
         tracks[dir].acquire();
+    print("THE DIRECTION "+ dir+"\n")
+
         // Start the loading machine
         permToLoad.release();
         // Wait for loading machine to finish
+        print("Loading the train \n")
         doneLoading.acquire();
         // Allow trains to enter station
         tracks[dir].release();
