@@ -9,10 +9,11 @@ class SmartGrid {
     Condition producer = lock.newCondition();
     Condition consume = lock.newCondition();
 
-    void startConsuming() {
+    void startConsuming() { 
+        // println "startConsuming running"
 
         lock.lock();
-        // print("RUNNING")
+        // println("printing")
         try {
             while (num_c >= num_p) {
                 consume.await();
@@ -20,7 +21,7 @@ class SmartGrid {
             num_c++;
             print("WORKED"+num_c)
             // printState()
-            println "num_p: "+num_p+", num_c: "+num_c;
+            println ("num_p: "+num_p+", num_c: "+num_c);
         } finally {
             lock.unlock();
         }
@@ -68,117 +69,17 @@ class SmartGrid {
         }
     }
 
-    /* Producer Priority
-    void stopProducing() { 
-        lock.lock();
-        try {
-            if (num_p <= num_c) {
-                num_c--;
-            }
-            num_p--;
-            producer.signal();
-        } finally {
-            lock.unlock();
-        }
-    }    
-    */   
-    // void printState() {
-    //      lock.lock();
-    //      try {
-    //          println "num_p: "+num_p+", num_c: "+num_c;	    
-    //      } finally {
-    //          lock.unlock();
-    //      }
-    //  }
-
 }
-// class SmartGrid {
-//     int noOfProducers = 0;
-//     int noOfConsumers = 0;
-//     int N = 20;
-    
-//     void startProducing() {
-//         while (noOfProducers >= N) {
-//             wait();
-//         }
-//         noOfProducers++;
-//         notifyAll();
-//     }
-//     void stopProducing() {
-//         while(noOfConsumers <= noOfProducers) {
-//             wait();
-//         }
-//         noOfProducers--;
-//         notifyAll();
-//     }
-//     void startConsuming() {
-//         while(noOfConsumers >= noOfProducers) {
-//             wait();
-//         }
-//         noOfConsumers++;
-//     }
-//     void stopConsuming() {
-//         noOfConsumers--;
-//         notifyAll();
-//     }
-// }
-// class SmartGrid {
-//     int noOfProducers = 0;
-//     int noOfConsumers = 0;
-//     int N = 20;
-    
-//     synchronized void startProducing() {
-//         while (noOfProducers >= N) {
-//             wait();
-//         }
-        
-//         noOfProducers++;
-//         println("pro: "+noOfProducers+" con: "+noOfConsumers);
-//         notifyAll();
-//     }
-//     synchronized void stopProducing() {
-//         while(noOfConsumers <= noOfProducers) {
-//             wait();
-//         }
-        
-//         noOfProducers--;
-//         println("pro: "+noOfProducers+" con: "+noOfConsumers);
-//         notifyAll();
-//     }
-//     synchronized void startConsuming() {
-//         while(noOfConsumers >= noOfProducers) {
-//             wait();
-//         }
-//         println("pro: "+noOfProducers+" con: "+noOfConsumers);
-//         noOfConsumers++;
-        
-        
-//     }
-//     synchronized void stopConsuming() {
-//         noOfConsumers--;
-//         println("pro: "+noOfProducers+" con: "+noOfConsumers);
-//         notifyAll();
-//     }
-//     // void printState() {
-//     //     lock.lock();
-//     //     try {
-//     //         println "num_p: "+num_p+", num_c: "+num_c;	    
-//     //     } finally {
-//     //         lock.unlock();
-//     //     }
-//     // }
-// }
-
 SmartGrid grid = new SmartGrid();
 println("STARTED")
 10.times {
     Thread.start {
         println("Hey")
         grid.startConsuming();
-        sleep(300);
+        // sleep(3000);
         grid.stopConsuming();
         grid.startProducing();
-        sleep(600);
+        // sleep(5000);
         grid.stopProducing();
     }
 }

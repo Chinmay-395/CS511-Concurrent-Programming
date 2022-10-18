@@ -34,13 +34,13 @@ class Bar{
 
 Bar b = new Bar();
 
-10.times{
+100.times{
   Thread.start {
     b.jets()
   }
 }
 
-10.times{
+100.times{
   Thread.start {
     b.patriots()
   }

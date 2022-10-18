@@ -11,10 +11,10 @@ Semaphore mutex = new Semaphore(1,true);
     
     Thread.start { // PassengerTrain travelling in direction dir
         tracks[dir].acquire();
-        mutex.acquire();
+        //mutex.acquire();
 
         print("passenger trains"+dir+"\n")
-        mutex.release();
+        //mutex.release();
         
         tracks[dir].release();
     }
@@ -27,15 +27,16 @@ Semaphore mutex = new Semaphore(1,true);
         mutex.acquire();
 
         tracks[dir].acquire();
-    print("THE DIRECTION "+ dir+"\n")
-
+        // print("THE DIRECTION "+ dir+"\n")
+        tracks[1-dir].acquire();
         // Start the loading machine
         permToLoad.release();
         // Wait for loading machine to finish
-        print("Loading the train \n")
+        // print("Loading the train \n")
         doneLoading.acquire();
         // Allow trains to enter station
         tracks[dir].release();
+        tracks[1-dir].release();
         mutex.release();
     }
 }

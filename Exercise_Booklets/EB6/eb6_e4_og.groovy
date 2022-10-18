@@ -1,30 +1,36 @@
+/*
+ Quiz 5A - 15 Oct 2021
+
+ Name1: Ming Lin	
+ Name2: Connor Haaf
+ Pledge: I pledge my honor that i have abided by the stevens honor system
+
+ */
 import java.util.concurrent.locks.*;
 
 // declarations
 class TrainStation {
-    int north_train_state=0; // for printing state //north-train-container
-    int south_train_state=0; // for printing state //south-train-container
+    int ntc=0; // for printing state
+    int stc=0; // for printing state
 
     boolean nt=false;
     boolean st=false;
 
     // declare locks and condition variables
-	Lock lock = new ReentrantLock();
-	Condition north = lock.newCondition();
-	Condition south = lock.newCondition();
-	Condition freight = lock.newCondition();
+		Lock lock = new ReentrantLock();
+		Condition north = lock.newCondition();
+		Condition south = lock.newCondition();
+		Condition freight = lock.newCondition();
     
     void acquireNorthTrackP() {
-		lock.lock();
-        try {
+			lock.lock();
+      try {
 	    	// complete
-			while (nt) {
-				// println("WAITING acquire North Track Passenger")
-				north.await()}; 
-			nt=true;
+				while (nt) north.await(); 
+				nt=true;
 
-	    	north_train_state++;
-	    	printState("acquire North Track Passenger");
+	    	ntc++;
+	    	printState();
 			} finally {
 	    	lock.unlock();
       }
@@ -33,14 +39,13 @@ class TrainStation {
     void releaseNorthTrackP() {
 			lock.lock();
       try {
-
 	    	// complete
 				nt=false;
 				north.signal();
 				freight.signal();
 
-	    	north_train_state--;
-	    	printState("release North Track Passenger");
+	    	ntc--;
+	    	printState();
 			} finally {
 	    	lock.unlock();
       }
@@ -50,13 +55,11 @@ class TrainStation {
 			lock.lock();
       try {
 	    	// complete
-				while(st) {
-					// println("WAITING acquire South Track Passenger")
-				south.await()};
+				while(st) south.await();
 				st=true;
 
-	    	south_train_state++;
-	    	printState("acquire South Track Passenger");
+	    	stc++;
+	    	printState();
 			} finally {
 	    	lock.unlock();
       }
@@ -70,8 +73,8 @@ class TrainStation {
 				south.signal();
 				freight.signal();
 
-	    	south_train_state--;
-	    	printState("release North Track Passenger");
+	    	stc--;
+	    	printState();
 			} finally {
 	    	lock.unlock();
       }
@@ -81,16 +84,14 @@ class TrainStation {
 			lock.lock();
       try {
 	    	// complete
-				while(nt || st) {
-					// println ("WAITING acquire Track Freight")
-					freight.await()};
+				while(nt || st) freight.await();
 
 				nt = true;
 				st = true;
 
-	    	north_train_state++;
-	    	south_train_state++;
-	    	printState("acquire Track Freight");
+	    	ntc++;
+	    	stc++;
+	    	printState();
 			} finally {
 	    	lock.unlock();
       }
@@ -107,19 +108,18 @@ class TrainStation {
 				nt = false;
 				st = false;
 	    
-	    	north_train_state--;
-	    	south_train_state--;
-	    	printState("release Track Freight");
+	    	ntc--;
+	    	stc--;
+	    	printState();
 			} finally {
 	    	lock.unlock();
       }
     }
 
-    void printState(x) {
+    void printState() {
 			lock.lock();
 			try {
-				println "STATE: north_train_state: "+north_train_state+", south_train_state: "+south_train_state;	    
-				// println x
+				println "ntc: "+ntc+", stc: "+stc;	    
 			} finally {
 				lock.unlock();
 			}
@@ -128,29 +128,29 @@ class TrainStation {
 
 TrainStation s = new TrainStation();
 
-5.times {
+10.times {
     int id = it;
     Thread.start { // Freight Train going in any direction
 			s.acquireTracksF();
-			print "FT "+ id+" "+"\n";
+            println("FT")
 			s.releaseTracksF()
     }
 }
 
-5.times{
+100.times{
     int id = it;
     Thread.start { // Passenger Train going North
 			s.acquireNorthTrackP();
-			print " NPT "+ id+" "+"\n";
+            println("NPT")
 			s.releaseNorthTrackP();
     }
 }
 
-5.times{
+100.times{
     int id = it;
     Thread.start { // Passenger Train going South
 			s.acquireSouthTrackP();
-			print " SPT "+ id+" "+"\n";
+            println("SPT")
 			s.releaseSouthTrackP();
     }
 }
