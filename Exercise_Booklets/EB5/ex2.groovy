@@ -1,51 +1,53 @@
-import java . util . concurrent . Semaphore ;
-
+import java.util.concurrent.Semaphore ;
+//its exactly like the readers-writers problem
  // Declare semaphores here
-Semaphore resource = new Semaphore(1)
-Semaphore s1 = new Semaphore(1)
-Semaphore s2 = new Semaphore(1)
-int N
-int dog = 0
-int cat = 0
+Semaphore mutex = new Semaphore(1)
+Semaphore mutexC = new Semaphore(1)//cats
+Semaphore mutexD = new Semaphore(1)//dogs
+// int N
+int dogs = 0
+int cats = 0
 
- 20. times {
-
-Thread . start { // Cat
-
-    s1.acquire()
-    cat++
-    if(cat == 1){
-        resource.acquire()
-    }
-    s1.release()
-    print("cat goes in \n")
-    s1.acquire()
-    cat--
-    if(cat == 0){
-        resource.release()
-    }
-    s1.release()
+5.times{
+    Thread.start { // cats
+        mutex.acquire();
+        mutexC.acquire()
+        cats++
+        if(cats == 1){
+            mutexD.acquire()
+        }
+        mutexC.release()
+        println("cats goes in "+cats)
+        mutexC.acquire()
+        cats--
+        println("cats goes out "+cats)
+        if(cats == 0){
+            mutexD.release()
+        }
+        mutexC.release()
+        mutex.release();
     }
 
  }
 
- 20.times{
-
-    Thread . start { // Dog
-
-    s2.acquire()
-    dog++
-    if(dog == 1){
-        resource.acquire()
-    }
-    s2.release()
-    print("dog goes in \n")
-    s2.acquire()
-    dog--
-    if(dog == 0){
-        resource.release()
-    }
-    s2.release()
+ 5.times{
+    Thread.start { // dogs
+        mutex.acquire();
+        mutexD.acquire()//if the cats inside CS thus it will block here
+        dogs++
+        if(dogs == 1){
+            mutexC.acquire()
+        }
+        mutexD.release()
+        println("dogs goes in "+dogs)
+        mutexD.acquire()
+        dogs--
+        println("dogs goes in "+dogs)
+        if(dogs == 0){
+            mutexC.release()
+        }
+        mutexD.release()
+        mutex.release();
 
     }
 
