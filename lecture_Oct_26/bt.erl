@@ -40,3 +40,9 @@ weekday(sunday) ->
     true;
 weekday(_) ->
     false.
+
+% let rec paths_to_leaves t = (* 'a gt -> int list list = <fun> *)
+%   match t with
+%   | Node (n, []) -> [[]]
+%   | Node (n, l) -> List.flatten (List.mapi (fun i n -> (List.map (fun x -> i :: x) n)) 
+%                     (List.map paths_to_leaves l))
