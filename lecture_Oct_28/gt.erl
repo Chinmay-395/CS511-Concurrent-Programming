@@ -13,6 +13,10 @@
 %%% paths_to_leaves(t1())
 %% [ [0], [1,0], [1,1], [1,2]]
 
+% helper function
+reverse([]) -> [];
+reverse([H | T]) -> reverse(T) ++ [H].
+
 t1() ->
     {node, 7, [
         {node, 3, []},
@@ -29,8 +33,11 @@ sum([H | T]) ->
 %% size of general tree
 sizegt({node, _D, CH}) ->
     1 + sum(lists:map(fun sizegt/1, CH)).
+
+mirror({empty}) -> {empty};
+mirror({node, D, CH}) -> {node, D, reverse(lists:map(fun mirror/1, CH))}.
 %% 
-% mirror({node,D,CH})
+% 
 % mapgt(F,{node,D,CH})
 % preorder({node,D,CH})
 % level(N,{node,D,CH}) 
