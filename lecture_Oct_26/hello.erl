@@ -21,3 +21,5 @@ what_day(_) -> weekday.
 
 fact(0) -> 1;
 fact(N) when N > 0 -> N * fact(N - 1).
+
+% lists:filter(fun(J)->(J rem 2)=:=0 end, [1,2,3,4,5]).

@@ -44,5 +44,35 @@ weekday(_) ->
 % let rec paths_to_leaves t = (* 'a gt -> int list list = <fun> *)
 %   match t with
 %   | Node (n, []) -> [[]]
-%   | Node (n, l) -> List.flatten (List.mapi (fun i n -> (List.map (fun x -> i :: x) n)) 
+%   | Node (n, l) -> List.flatten (List.mapi (fun i n -> (List.map (fun x -> i :: x) n))
 %                     (List.map paths_to_leaves l))
+% -moodule(ic).
+% -compile(export_all).
+allEmpty(Queue) ->
+    {Item, NextQueue} = queue:out(Queue),
+    case Item of
+        empty -> true;
+        {value, {empty}} -> allEmpty(NextQueue);
+        {value, {node, _, _, _}} -> false
+    end.
+
+isComplete({empty}) ->
+    true;
+isComplete(Node) ->
+    Q = queue:new(),
+    Q1 = queue:in(Node, Q),
+    isCompleteHelper(Q1).
+
+isCompleteHelper(Queue) ->
+    {Item, NextQueue} = queue:out(Queue),
+    case Item of
+        empty ->
+            true;
+        {value, {empty}} ->
+            allEmpty(NextQueue);
+        {value, {node, _, Left, Right}} ->
+            isCompleteHelper(queue:in(Right, queue:in(Left, NextQueue)))
+    end.
+
+t3() -> {node, 1, {node, 2, {empty}, {empty}}, {node, 3, {empty}, {empty}}}.
+t2() -> {node, 1, {node, 2, {empty}, {empty}}, {node, 3, {empty}, {node, 3, {empty}, {empty}}}}.
