@@ -43,6 +43,9 @@ sum([H | T]) ->
 sizegt({node, _D, CH}) ->
     1 + sum(lists:map(fun sizegt/1, CH)).
 
+-spec sumgt(gt(_A)) -> integer().
+sumgt({node, D, CH}) -> D + sum(lists:map(fun sumgt/1, CH)).
+
 mirror({empty}) -> {empty};
 mirror({node, D, CH}) -> {node, D, reverse(lists:map(fun mirror/1, CH))}.
 % gt:mirror(gt:t1()).
@@ -67,44 +70,15 @@ prepend(N, [H | T]) -> [N | H] ++ prepend(N, T).
 is_leaf({node, _D, []}) -> true;
 is_leaf(_) -> false.
 
-% how to implement path_to_leaves using accumulator
-% how to pass the value from parent function to child function
-% is there anything similar to (Ocaml)Lists.mapi in Erlang
-get_the_index_of_list(Ele, ListVal) -> lists:nth(Ele, ListVal).
+add_prefixes(_I, []) ->
+    [];
+add_prefixes(I, [H | T]) ->
+    lists:map(fun(L) -> [I | L] end, H) ++ add_prefixes(I + 1, T).
 
-% path_to_leaves({node, _D, []}) ->
-%     [[]];
-% path_to_leaves({node, N, L}) ->
-%     lists:flatten(
-%         lists:map(
-%             fun(I, N) ->
-%                 (lists:map(fun(X) -> I ++ X end, N))
-%             end,
-%             lists:map(fun path_to_leaves/1, L)
-%         )
-%     ).
-
-% Another Attempt
-% index_substituter({node,D,L},VAL) -> {node,VAL,L}
-% convert_into_index([], _I) -> [];
-% convert_into_index([H|T], I) ->  ++ convert_into_index(T, I + 1).
-% % gt:convert_into_index(gt:t1()).
-% update_tree({node, D, CH}) ->
-%     {node, D, list:map(
-% 								update_tree(
-% 									convert_into_index(CH, 0)
-% 								)
-% 							)
-% 		}.
-
-% path_to_leaves(T) ->
-% 	lists:map(
-% 		remove_initial_root(
-% 			path_to_leaves_helper(
-% 				update_tree(T)
-% 			)
-% 		)
-% 	)
+paths_to_leaves({node, _D, []}) ->
+    [[]];
+paths_to_leaves({node, _D, CH}) ->
+    add_prefixes(0, lists:map(fun paths_to_leaves/1, CH)).
 
 enumerate(List) ->
     {List1, _} = lists:mapfoldl(fun(T, Acc) -> {{Acc, T}, Acc + 1} end, 1, List),
