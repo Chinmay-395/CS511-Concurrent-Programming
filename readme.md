@@ -18,3 +18,8 @@ calling fact
 ```
 
 Note above: a record is just syntactic sugar for a tuple
+
+```
+someGet(Z) ->shipping:shipco()
+
+Shipping_State#shipping_state.ships

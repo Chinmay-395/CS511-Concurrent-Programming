@@ -99,3 +99,21 @@ level(N, {node, _D, CH}) when N > 0 ->
 % -spec foldT(fun((A) -> B), fun((list(B)) -> B), gt(A)) -> B.
 foldT(F, G, {node, D, CH}) ->
     F(D, G(lists:map(fun(T) -> foldT(F, G, T) end, CH))).
+
+% 1> rd(state, {port, clients}).              
+% state
+% 2> rd(client, {pid, acc}).
+% client
+% 3> State = #state{port=9921, clients=[#client{pid = "A", acc = <<85>>}, #client{pid = "B", acc = <<73>>}, #client{pid = "C", acc = <<56>>}]}.
+% #state{port = 9921,
+%        clients = [#client{pid = "A",acc = <<"U">>},
+%                   #client{pid = "B",acc = <<"I">>},
+%                   #client{pid = "C",acc = <<"8">>}]}
+% 4> #client.pid.         
+% 2
+% 5> Find = fun(Pid, State) -> lists:keyfind(Pid, #client.pid, State#state.clients) =/= false end.
+% #Fun<erl_eval.12.50752066>
+% 6> Find("B", State).
+% true
+% 7> Find("Z", State).
+% false
