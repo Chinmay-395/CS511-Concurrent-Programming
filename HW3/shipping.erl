@@ -5,21 +5,14 @@
 get_ship(Shipping_State, Ship_ID) ->
     lists:keyfind(Ship_ID, #ship.id, Shipping_State#shipping_state.ships).
 
-% print_ship(Shipping_State) ->
-%     element(1, lists:mapShipping_State#shipping_state.ship_locations).
-% checkTheFilter(Tup, AccIn) ->
-%     if
-%         element(1, Tup) == Val -> true;
-%         true -> false
-%     end.
+print_ship(Shipping_State) ->
+    Shipping_State#shipping_state.ship_inventory.
 
-% somerandomFunction(Shipping_State) ->
-%     {Port, Dock, _} <- Shipping_State#shipping_state.ship_locations,
-%         (Port == Port_ID)
-
-% filter_the_list(TheEntireList,Port_ID) ->
-%     lists:foldr(,TheEntireList).
-
+print_func(Shipping_State) ->
+    element(
+        2,
+        maps:find(2, Shipping_State#shipping_state.ship_inventory)
+    ).
 get_container(Shipping_State, Container_ID) ->
     lists:keyfind(Container_ID, #container.id, Shipping_State#shipping_state.containers).
 
@@ -62,10 +55,10 @@ get_container_weight(Shipping_State, Container_IDs) ->
             Container_IDs
         )
     ).
-
+% 🛑 The error handing here is required
 get_ship_weight(Shipping_State, Ship_ID) ->
-    io:format("Implement me!!"),
-    error.
+    TheContainersOfThatShip = element(2, maps:find(Ship_ID, print_ship(Shipping_State))),
+    get_container_weight(Shipping_State, TheContainersOfThatShip).
 
 load_ship(Shipping_State, Ship_ID, Container_IDs) ->
     io:format("Implement me!!"),
