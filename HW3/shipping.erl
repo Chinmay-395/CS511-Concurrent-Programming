@@ -3,7 +3,7 @@
 -include_lib("./shipping.hrl").
 
 get_ship(Shipping_State, Ship_ID) ->
-    lists:keyfind(Ship_ID, #ship.name, Shipping_State#shipping_state.ships).
+    lists:keyfind(Ship_ID, #ship.id, Shipping_State#shipping_state.ships).
 
 % print_ship(Shipping_State) ->
 %     element(1, lists:mapShipping_State#shipping_state.ship_locations).
