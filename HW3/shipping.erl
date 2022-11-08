@@ -50,10 +50,18 @@ get_ship_location(Shipping_State, Ship_ID) ->
         TheResult == [] -> error;
         TheResult /= [] -> TheResult
     end.
-
+% Creating a helper function
+sum([]) -> 0;
+sum([H | T]) -> H + sum(T).
 get_container_weight(Shipping_State, Container_IDs) ->
-    io:format("Implement me!!"),
-    error.
+    sum(
+        lists:map(
+            fun(Container_ID_Val) ->
+                element(3, get_container(Shipping_State, Container_ID_Val))
+            end,
+            Container_IDs
+        )
+    ).
 
 get_ship_weight(Shipping_State, Ship_ID) ->
     io:format("Implement me!!"),
