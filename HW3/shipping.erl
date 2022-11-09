@@ -19,6 +19,16 @@ get_container(Shipping_State, Container_ID) ->
 get_port(Shipping_State, Port_ID) ->
     lists:keyfind(Port_ID, #port.id, Shipping_State#shipping_state.ports).
 
+% getAllShipLocations(Shipping_State) -> Shipping_State#shipping_state.ship_locations.
+
+% someHelper(List_of_tuples,Port_ID) ->
+% 	F =
+% 		fun ({P,D,S}) ->
+% 			if
+% 				(P==Port_ID) -> false;
+% 			(_) -> true end,
+% 	lists:filter(F,List_of_tuples).
+
 get_occupied_docks(Shipping_State, Port_ID) ->
     [
         Dock
@@ -32,6 +42,18 @@ get_the_list(Shipping_State, Ship_ID) ->
      || {Port, Dock, Ship} <- Shipping_State#shipping_state.ship_locations,
         (Ship == Ship_ID)
     ].
+% 🛑At any given instance will the ship have only one location,
+%  will it have a lists of location or a single location
+% I know if we want multiple locations of a ship
+% Locations = [
+%     {1, 'B', 1},
+%     {1, 'A', 3},
+%     {3, 'C', 2},
+%     {2, 'D', 4},👈️
+%     {3, 'A', 4},👈️
+%     {2, 'B', 5}
+%  ]
+% should I check for the error handling for the above case
 get_ship_location(Shipping_State, Ship_ID) ->
     TheResult = [
         {Port, Dock}
@@ -41,7 +63,7 @@ get_ship_location(Shipping_State, Ship_ID) ->
 
     if
         TheResult == [] -> error;
-        TheResult /= [] -> TheResult
+        TheResult /= [] -> lists:nth(1, TheResult)
     end.
 % Creating a helper function
 sum([]) -> 0;
@@ -59,19 +81,55 @@ get_container_weight(Shipping_State, Container_IDs) ->
 get_ship_weight(Shipping_State, Ship_ID) ->
     TheContainersOfThatShip = element(2, maps:find(Ship_ID, print_ship(Shipping_State))),
     get_container_weight(Shipping_State, TheContainersOfThatShip).
-
+% Q8
+% The load_ship function takes Ship_ID -> number Container_IDs -> list
+% check whether size of Container_IDs + size of Ship_Inventory is than or equal than Ship's capacity
+% check at which port is the ship at from Locations
+% remove the Container_IDs from Port_Inventory
+% add those in ship_inventory
 load_ship(Shipping_State, Ship_ID, Container_IDs) ->
-    io:format("Implement me!!"),
-    error.
+    Ship_Details = element(4, get_ship(Shipping_State, 1)),
+    ShipInventoryList = Shipping_State#shipping_state.ship_inventory,
+    SumOfContainerWeight =
+        get_list_size(Container_IDs) +
+            get_list_size(element(2, maps:find(Ship_ID, ShipInventoryList))),
 
-unload_ship_all(Shipping_State, Ship_ID) ->
-    io:format("Implement me!!"),
-    error.
+    % Port_Inventory = maps:get(Port_ID, Shipping_State#shipping_state.port_inventory),
+    io:fwrite("~w ~n", [SumOfContainerWeight]),
+    if
+        SumOfContainerWeight > Ship_Details ->
+            error;
+        true ->
+            % Port_Inventory =
+            %     lists:all(
+            %         fun(Container) ->
+            %             lists:member(Container, Port_Inventory)
+            %         end,
+            %         Container_IDs
+            %     ),
+            false
+    end.
+get_list_size([]) -> 0;
+get_list_size([_H | T]) -> 1 + get_list_size(T).
 
+% Q9
+% unload_ship_all(Shipping_State, Ship_ID) ->
+%     ShipInventoryList = Shipping_State#shipping_state.ship_inventory,
+%     Ship_Details = element(4, get_ship(Shipping_State, 1)),
+%     SumOfContainerWeight =
+%         get_list_size(Container_IDs) +
+%             get_list_size(element(2, maps:find(Ship_ID, ShipInventoryList))),
+%     io:fwrite("~w", [SumOfContainerWeight]),
+%     if
+%         SumOfContainerWeight > Ship_Details -> true;
+%         true -> false
+%     end.
+
+% Q10
 unload_ship(Shipping_State, Ship_ID, Container_IDs) ->
     io:format("Implement me!!"),
     error.
-
+% Q11
 set_sail(Shipping_State, Ship_ID, {Port_ID, Dock}) ->
     io:format("Implement me!!"),
     error.
