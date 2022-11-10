@@ -1,7 +1,7 @@
 -module(shipping).
 -compile(export_all).
 -include_lib("./shipping.hrl").
-
+% Q1
 get_ship(Shipping_State, Ship_ID) ->
     lists:keyfind(Ship_ID, #ship.id, Shipping_State#shipping_state.ships).
 
@@ -13,22 +13,16 @@ print_func(Shipping_State) ->
         2,
         maps:find(2, Shipping_State#shipping_state.ship_inventory)
     ).
+
+% Q2
 get_container(Shipping_State, Container_ID) ->
     lists:keyfind(Container_ID, #container.id, Shipping_State#shipping_state.containers).
-
+% Q3
 get_port(Shipping_State, Port_ID) ->
     lists:keyfind(Port_ID, #port.id, Shipping_State#shipping_state.ports).
 
-% getAllShipLocations(Shipping_State) -> Shipping_State#shipping_state.ship_locations.
-
-% someHelper(List_of_tuples,Port_ID) ->
-% 	F =
-% 		fun ({P,D,S}) ->
-% 			if
-% 				(P==Port_ID) -> false;
-% 			(_) -> true end,
-% 	lists:filter(F,List_of_tuples).
-
+getAllShipLocations(Shipping_State) -> Shipping_State#shipping_state.ship_locations.
+% Q4
 get_occupied_docks(Shipping_State, Port_ID) ->
     [
         Dock
@@ -42,6 +36,7 @@ get_the_list(Shipping_State, Ship_ID) ->
      || {Port, Dock, Ship} <- Shipping_State#shipping_state.ship_locations,
         (Ship == Ship_ID)
     ].
+% Q5
 % 🛑At any given instance will the ship have only one location,
 %  will it have a lists of location or a single location
 % I know if we want multiple locations of a ship
@@ -54,6 +49,8 @@ get_the_list(Shipping_State, Ship_ID) ->
 %     {2, 'B', 5}
 %  ]
 % should I check for the error handling for the above case
+
+%Q5
 get_ship_location(Shipping_State, Ship_ID) ->
     TheResult = [
         {Port, Dock}
@@ -68,6 +65,7 @@ get_ship_location(Shipping_State, Ship_ID) ->
 % Creating a helper function
 sum([]) -> 0;
 sum([H | T]) -> H + sum(T).
+%Q6
 get_container_weight(Shipping_State, Container_IDs) ->
     sum(
         lists:map(
@@ -78,6 +76,8 @@ get_container_weight(Shipping_State, Container_IDs) ->
         )
     ).
 % 🛑 The error handing here is required
+
+%7
 get_ship_weight(Shipping_State, Ship_ID) ->
     TheContainersOfThatShip = element(2, maps:find(Ship_ID, print_ship(Shipping_State))),
     get_container_weight(Shipping_State, TheContainersOfThatShip).
@@ -87,30 +87,66 @@ get_ship_weight(Shipping_State, Ship_ID) ->
 % check at which port is the ship at from Locations
 % remove the Container_IDs from Port_Inventory
 % add those in ship_inventory
+
+%8
 load_ship(Shipping_State, Ship_ID, Container_IDs) ->
     Ship_Details = element(4, get_ship(Shipping_State, 1)),
     ShipInventoryList = Shipping_State#shipping_state.ship_inventory,
+    ListOfAllContainersOnShips = element(2, maps:find(Ship_ID, ShipInventoryList)),
     SumOfContainerWeight =
         get_list_size(Container_IDs) +
             get_list_size(element(2, maps:find(Ship_ID, ShipInventoryList))),
+    TheCurrentPortIDOfShip = element(1, get_ship_location(Shipping_State, Ship_ID)),
 
-    % Port_Inventory = maps:get(Port_ID, Shipping_State#shipping_state.port_inventory),
+    Port_Inventory = maps:get(TheCurrentPortIDOfShip, Shipping_State#shipping_state.port_inventory),
     io:fwrite("~w ~n", [SumOfContainerWeight]),
-    if
-        SumOfContainerWeight > Ship_Details ->
-            error;
-        true ->
-            % Port_Inventory =
-            %     lists:all(
-            %         fun(Container) ->
-            %             lists:member(Container, Port_Inventory)
-            %         end,
-            %         Container_IDs
-            %     ),
-            false
-    end.
-get_list_size([]) -> 0;
-get_list_size([_H | T]) -> 1 + get_list_size(T).
+    io:fwrite("~w The val -> ~n", [element(2, maps:find(Ship_ID, ShipInventoryList))]),
+    io:fwrite("~w ~n", [Port_Inventory]),
+    UpdatingPortInventory =
+        lists:filter(fun(X) -> lists:member(X, Container_IDs) == false end, Port_Inventory),
+    UpdatingShipInventory = lists:merge(ListOfAllContainersOnShips, Container_IDs),
+
+    {ok, Shipping_State#shipping_state{
+        ships = Shipping_State#shipping_state.ships,
+        containers = Shipping_State#shipping_state.containers,
+        ports = Shipping_State#shipping_state.ports,
+        ship_locations = Shipping_State#shipping_state.ship_locations,
+        ship_inventory = maps:put(
+            Ship_ID, UpdatingShipInventory, Shipping_State#shipping_state.ship_inventory
+        ),
+        port_inventory = maps:put(
+            TheCurrentPortIDOfShip,
+            UpdatingPortInventory,
+            Shipping_State#shipping_state.port_inventory
+        )
+    }}.
+% if
+%     SumOfContainerWeight > Ship_Details ->
+%         error;
+%     true ->
+%         % if
+%             % is_sublist(Port_Inventory, Container_IDs) ->
+%                 UpdatingPortInventory =
+%                     lists:filter(fun(X) -> lists:member(X, Container_IDs) == false end, Port_Inventory),
+%                 UpdatingShipInventory = lists:merge(ShipInventoryList,Container_IDs),
+
+%                 {ok, Shipping_State#shipping_state {
+%                     ships = Shipping_State#shipping_state.ships,
+%                     containers = Shipping_State#shipping_state.containers,
+%                     ports = Shipping_State#shipping_state.ports,
+%                     ship_locations = Shipping_State#shipping_state.ship_locations,
+%                     ship_inventory = maps:put(Ship_ID, UpdatingShipInventory, Shipping_State#shipping_state.ship_inventory),
+%                     port_inventory = maps:put(Port_ID, UpdatingPortInventory, Shipping_State#shipping_state.port_inventory)
+%                 }};
+
+%         % (_) -> error
+%         % end
+
+% end.
+get_list_size([]) ->
+    0;
+get_list_size([_H | T]) ->
+    1 + get_list_size(T).
 
 % Q9
 % unload_ship_all(Shipping_State, Ship_ID) ->
