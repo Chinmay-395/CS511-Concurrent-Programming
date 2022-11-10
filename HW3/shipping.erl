@@ -65,7 +65,8 @@ get_ship_location(Shipping_State, Ship_ID) ->
 % Creating a helper function
 sum([]) -> 0;
 sum([H | T]) -> H + sum(T).
-%Q6
+%Q6 🛑 The error handing here is required
+% 🛑Should I need to check whether the containers mentioned in ship_inventory & port_inventory are correct?
 get_container_weight(Shipping_State, Container_IDs) ->
     sum(
         lists:map(
@@ -75,7 +76,6 @@ get_container_weight(Shipping_State, Container_IDs) ->
             Container_IDs
         )
     ).
-% 🛑 The error handing here is required
 
 % Q7 🛑 The error handing here is required
 get_ship_weight(Shipping_State, Ship_ID) ->
@@ -182,8 +182,57 @@ unload_ship_all(Shipping_State, Ship_ID) ->
 
 % Q10
 unload_ship(Shipping_State, Ship_ID, Container_IDs) ->
-    io:format("Implement me!!"),
-    error.
+    {ship, Ship_ID, _, _} = get_ship(Shipping_State, 1),
+    AllPortInventoryList = Shipping_State#shipping_state.port_inventory,
+    ShipInventoryList = Shipping_State#shipping_state.ship_inventory,
+    ListOfAllContainersOnShips = element(2, maps:find(Ship_ID, ShipInventoryList)),
+    io:format("ListOfAllContainersOnShips ~w ~n", [ListOfAllContainersOnShips]),
+
+    case is_sublist(ListOfAllContainersOnShips, Container_IDs) of
+        false ->
+            error;
+        true ->
+            {PortIDOfTheShip, _} = get_ship_location(Shipping_State, Ship_ID),
+            {_, _, _, _, CapacityOfPortID} = get_port(Shipping_State, PortIDOfTheShip),
+            SumOfContainerWeight =
+                get_list_size(Container_IDs) +
+                    get_list_size(ListOfAllContainersOnShips),
+            case SumOfContainerWeight > CapacityOfPortID of
+                true ->
+                    error;
+                false ->
+                    % removing the container-ids in shipInventory which are similar to container_ids
+                    UpdatingShipInventory = lists:filter(
+                        fun(X) ->
+                            lists:member(X, Container_IDs) == false
+                        end,
+                        ListOfAllContainersOnShips
+                    ),
+                    {_, ShipIDPortInventoryList} = maps:find(PortIDOfTheShip, AllPortInventoryList),
+                    UpdatingPortInventory = lists:merge(ShipIDPortInventoryList, Container_IDs),
+                    io:format("updated port inventory ~w ~n", [UpdatingPortInventory]),
+                    io:format("updated ship inventory ~w ~n", [UpdatingShipInventory]),
+                    {ok, Shipping_State#shipping_state{
+                        ships = Shipping_State#shipping_state.ships,
+                        containers = Shipping_State#shipping_state.containers,
+                        ports = Shipping_State#shipping_state.ports,
+                        ship_locations = Shipping_State#shipping_state.ship_locations,
+                        ship_inventory = maps:put(
+                            Ship_ID,
+                            UpdatingShipInventory,
+                            Shipping_State#shipping_state.ship_inventory
+                        ),
+                        port_inventory = maps:put(
+                            PortIDOfTheShip,
+                            UpdatingPortInventory,
+                            Shipping_State#shipping_state.port_inventory
+                        )
+                    }}
+            end,
+            %🛑how to avoid using ok here or whether the return type is correct or not.
+            ok
+    end.
+
 % Q11
 set_sail(Shipping_State, Ship_ID, {Port_ID, Dock}) ->
     io:format("Implement me!!"),
