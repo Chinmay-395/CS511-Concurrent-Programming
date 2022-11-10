@@ -103,44 +103,25 @@ load_ship(Shipping_State, Ship_ID, Container_IDs) ->
     UpdatingPortInventory =
         lists:filter(fun(X) -> lists:member(X, Container_IDs) == false end, Port_Inventory),
     UpdatingShipInventory = lists:merge(ListOfAllContainersOnShips, Container_IDs),
-
-    {ok, Shipping_State#shipping_state{
-        ships = Shipping_State#shipping_state.ships,
-        containers = Shipping_State#shipping_state.containers,
-        ports = Shipping_State#shipping_state.ports,
-        ship_locations = Shipping_State#shipping_state.ship_locations,
-        ship_inventory = maps:put(
-            Ship_ID, UpdatingShipInventory, Shipping_State#shipping_state.ship_inventory
-        ),
-        port_inventory = maps:put(
-            TheCurrentPortIDOfShip,
-            UpdatingPortInventory,
-            Shipping_State#shipping_state.port_inventory
-        )
-    }}.
-% if
-%     SumOfContainerWeight > Ship_Details ->
-%         error;
-%     true ->
-%         % if
-%             % is_sublist(Port_Inventory, Container_IDs) ->
-%                 UpdatingPortInventory =
-%                     lists:filter(fun(X) -> lists:member(X, Container_IDs) == false end, Port_Inventory),
-%                 UpdatingShipInventory = lists:merge(ShipInventoryList,Container_IDs),
-
-%                 {ok, Shipping_State#shipping_state {
-%                     ships = Shipping_State#shipping_state.ships,
-%                     containers = Shipping_State#shipping_state.containers,
-%                     ports = Shipping_State#shipping_state.ports,
-%                     ship_locations = Shipping_State#shipping_state.ship_locations,
-%                     ship_inventory = maps:put(Ship_ID, UpdatingShipInventory, Shipping_State#shipping_state.ship_inventory),
-%                     port_inventory = maps:put(Port_ID, UpdatingPortInventory, Shipping_State#shipping_state.port_inventory)
-%                 }};
-
-%         % (_) -> error
-%         % end
-
-% end.
+    case SumOfContainerWeight > Ship_Details of
+        true ->
+            error;
+        false ->
+            {ok, Shipping_State#shipping_state{
+                ships = Shipping_State#shipping_state.ships,
+                containers = Shipping_State#shipping_state.containers,
+                ports = Shipping_State#shipping_state.ports,
+                ship_locations = Shipping_State#shipping_state.ship_locations,
+                ship_inventory = maps:put(
+                    Ship_ID, UpdatingShipInventory, Shipping_State#shipping_state.ship_inventory
+                ),
+                port_inventory = maps:put(
+                    TheCurrentPortIDOfShip,
+                    UpdatingPortInventory,
+                    Shipping_State#shipping_state.port_inventory
+                )
+            }}
+    end.
 get_list_size([]) ->
     0;
 get_list_size([_H | T]) ->
@@ -179,6 +160,8 @@ unload_ship_all(Shipping_State, Ship_ID) ->
             % Expected output [26,27,28,29,30,1,3,4,13]
             UpdatingPortInventory = lists:merge(ShipIDShipInventoryList, ShipIDPortInventoryList),
             UpdatingShipInventory = [],
+            print_state(Shipping_State),
+            io:fwrite("~n"),
             {ok, Shipping_State#shipping_state{
                 ships = Shipping_State#shipping_state.ships,
                 containers = Shipping_State#shipping_state.containers,
@@ -196,11 +179,6 @@ unload_ship_all(Shipping_State, Ship_ID) ->
                 )
             }}
     end.
-
-% if
-%     SumOfContainerWeight > Ship_Details -> true;
-%     true -> false
-% end.
 
 % Q10
 unload_ship(Shipping_State, Ship_ID, Container_IDs) ->
