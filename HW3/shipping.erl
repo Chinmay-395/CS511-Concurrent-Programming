@@ -77,18 +77,16 @@ get_container_weight(Shipping_State, Container_IDs) ->
     ).
 % 🛑 The error handing here is required
 
-%7
+% Q7 🛑 The error handing here is required
 get_ship_weight(Shipping_State, Ship_ID) ->
     TheContainersOfThatShip = element(2, maps:find(Ship_ID, print_ship(Shipping_State))),
     get_container_weight(Shipping_State, TheContainersOfThatShip).
-% Q8
+% Q8 🛑 🛑 The error handing here is required
 % The load_ship function takes Ship_ID -> number Container_IDs -> list
 % check whether size of Container_IDs + size of Ship_Inventory is than or equal than Ship's capacity
 % check at which port is the ship at from Locations
 % remove the Container_IDs from Port_Inventory
 % add those in ship_inventory
-
-%8
 load_ship(Shipping_State, Ship_ID, Container_IDs) ->
     Ship_Details = element(4, get_ship(Shipping_State, 1)),
     ShipInventoryList = Shipping_State#shipping_state.ship_inventory,
@@ -148,18 +146,61 @@ get_list_size([]) ->
 get_list_size([_H | T]) ->
     1 + get_list_size(T).
 
-% Q9
-% unload_ship_all(Shipping_State, Ship_ID) ->
-%     ShipInventoryList = Shipping_State#shipping_state.ship_inventory,
-%     Ship_Details = element(4, get_ship(Shipping_State, 1)),
-%     SumOfContainerWeight =
-%         get_list_size(Container_IDs) +
-%             get_list_size(element(2, maps:find(Ship_ID, ShipInventoryList))),
-%     io:fwrite("~w", [SumOfContainerWeight]),
-%     if
-%         SumOfContainerWeight > Ship_Details -> true;
-%         true -> false
-%     end.
+% The unload_ship_all function takes Ship_ID
+% check whether size of Port_Inventory + size of Ship_Inventory is less than or equal than Ship's capacity
+% check at which port is the ship at from Locations
+% remove the Container_IDs from Port_Inventory
+% add those in ship_inventory
+% Q9 🛑 The error handing here is required
+unload_ship_all(Shipping_State, Ship_ID) ->
+    AllShipInventoryList = Shipping_State#shipping_state.ship_inventory,
+    AllPortInventoryList = Shipping_State#shipping_state.port_inventory,
+    {_, ShipIDShipInventoryList} = maps:find(Ship_ID, AllShipInventoryList),
+
+    {PortIDOfTheShip, _} = get_ship_location(Shipping_State, Ship_ID),
+    {_, ShipIDPortInventoryList} = maps:find(PortIDOfTheShip, AllPortInventoryList),
+    {_, _, _, _, CapacityOfPortID} = get_port(Shipping_State, PortIDOfTheShip),
+    SumOfContainerWeight =
+        get_list_size(ShipIDShipInventoryList) +
+            get_list_size(ShipIDPortInventoryList),
+    io:fwrite("~w", [SumOfContainerWeight]),
+    io:fwrite("~n"),
+    io:fwrite("~w", [CapacityOfPortID]),
+    io:fwrite("~w", [ShipIDPortInventoryList]),
+    io:fwrite("~n"),
+    io:fwrite("~w", [ShipIDShipInventoryList]),
+
+    case SumOfContainerWeight > CapacityOfPortID of
+        true ->
+            error;
+        false ->
+            % Check the output 🛑
+            % my output       [1,3,4,13,26,27,28,29,30]
+            % Expected output [26,27,28,29,30,1,3,4,13]
+            UpdatingPortInventory = lists:merge(ShipIDShipInventoryList, ShipIDPortInventoryList),
+            UpdatingShipInventory = [],
+            {ok, Shipping_State#shipping_state{
+                ships = Shipping_State#shipping_state.ships,
+                containers = Shipping_State#shipping_state.containers,
+                ports = Shipping_State#shipping_state.ports,
+                ship_locations = Shipping_State#shipping_state.ship_locations,
+                ship_inventory = maps:put(
+                    Ship_ID,
+                    UpdatingShipInventory,
+                    Shipping_State#shipping_state.ship_inventory
+                ),
+                port_inventory = maps:put(
+                    PortIDOfTheShip,
+                    UpdatingPortInventory,
+                    Shipping_State#shipping_state.port_inventory
+                )
+            }}
+    end.
+
+% if
+%     SumOfContainerWeight > Ship_Details -> true;
+%     true -> false
+% end.
 
 % Q10
 unload_ship(Shipping_State, Ship_ID, Container_IDs) ->
