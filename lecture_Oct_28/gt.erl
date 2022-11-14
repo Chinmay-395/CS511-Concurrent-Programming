@@ -100,7 +100,7 @@ level(N, {node, _D, CH}) when N > 0 ->
 foldT(F, G, {node, D, CH}) ->
     F(D, G(lists:map(fun(T) -> foldT(F, G, T) end, CH))).
 
-% 1> rd(state, {port, clients}).              
+% 1> rd(state, {port, clients}).
 % state
 % 2> rd(client, {pid, acc}).
 % client
@@ -109,7 +109,7 @@ foldT(F, G, {node, D, CH}) ->
 %        clients = [#client{pid = "A",acc = <<"U">>},
 %                   #client{pid = "B",acc = <<"I">>},
 %                   #client{pid = "C",acc = <<"8">>}]}
-% 4> #client.pid.         
+% 4> #client.pid.
 % 2
 % 5> Find = fun(Pid, State) -> lists:keyfind(Pid, #client.pid, State#state.clients) =/= false end.
 % #Fun<erl_eval.12.50752066>
@@ -117,3 +117,12 @@ foldT(F, G, {node, D, CH}) ->
 % true
 % 7> Find("Z", State).
 % false
+theListOfStuff() -> [{1, 'B', 1}, {1, 'A', 3}, {3, 'C', 2}, {2, 'D', 4}, {2, 'B', 5}].
+workFunction(NewLocation) -> lists:map(fun(L) -> element(1, hd(L)) end, NewLocation).
+
+% helperFunc(Shipping_State,EachContainer)->
+% lists:keyfind(
+%     EachContainer,
+%     #container.id,
+%     Shipping_State#shipping_state.containers
+% ).

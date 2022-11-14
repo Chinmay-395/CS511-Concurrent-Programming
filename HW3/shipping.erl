@@ -252,6 +252,7 @@ unload_ship(Shipping_State, Ship_ID, Container_IDs) ->
 
             case is_sublist(ListOfAllContainersOnShips, Container_IDs) of
                 false ->
+                    io:format("The given containers are not all on the same ship... ~n"),
                     error;
                 true ->
                     {PortIDOfTheShip, _} = get_ship_location(Shipping_State, Ship_ID),
@@ -307,34 +308,46 @@ set_sail(Shipping_State, Ship_ID, {Port_ID, Dock}) ->
         error ->
             error;
         _ ->
-            TheResult = Shipping_State#shipping_state.ship_locations,
+            case get_port(Shipping_State, Port_ID) of
+                error ->
+                    error;
+                _ ->
+                    case lists:member(Dock, get_occupied_docks(Shipping_State, Ship_ID)) of
+                        true ->
+                            error;
+                        _ ->
+                            TheResult = Shipping_State#shipping_state.ship_locations,
 
-            Some = lists:filter(fun({P, _, _}) -> P == Port_ID end, TheResult),
-            Some2 = lists:filter(fun({_, D, _}) -> D == Dock end, Some),
+                            Some = lists:filter(fun({P, _, _}) -> P == Port_ID end, TheResult),
+                            Some2 = lists:filter(fun({_, D, _}) -> D == Dock end, Some),
 
-            case Some2 == [] of
-                true ->
-                    % removing the original location
-                    New = lists:filter(
-                        fun({_P, _D, S}) ->
-                            % io:format("~w ~n", [P]),
-                            S /= Ship_ID
-                        end,
-                        TheResult
-                    ),
-                    % io:format("Implement me!! ~w ~n", [New]),
-                    New2 = lists:append(New, [{Port_ID, Dock, Ship_ID}]),
-                    % io:format("Implement me!! ~w ~n", [New2]),
-                    {ok, Shipping_State#shipping_state{
-                        ships = Shipping_State#shipping_state.ships,
-                        containers = Shipping_State#shipping_state.containers,
-                        ports = Shipping_State#shipping_state.ports,
-                        ship_locations = New2,
-                        ship_inventory = Shipping_State#shipping_state.ship_inventory,
-                        port_inventory = Shipping_State#shipping_state.port_inventory
-                    }};
-                false ->
-                    error
+                            case Some2 == [] of
+                                true ->
+                                    % removing the original location
+                                    New = lists:filter(
+                                        fun({_P, _D, S}) ->
+                                            % io:format("~w ~n", [P]),
+                                            S /= Ship_ID
+                                        end,
+                                        TheResult
+                                    ),
+                                    % io:format("Implement me!! ~w ~n", [New]),
+                                    New2 = lists:append(New, [{Port_ID, Dock, Ship_ID}]),
+                                    % io:format("Implement me!! ~w ~n", [New2]),
+                                    {ok, Shipping_State#shipping_state{
+                                        ships = Shipping_State#shipping_state.ships,
+                                        containers = Shipping_State#shipping_state.containers,
+                                        ports = Shipping_State#shipping_state.ports,
+                                        ship_locations = New2,
+                                        ship_inventory =
+                                            Shipping_State#shipping_state.ship_inventory,
+                                        port_inventory =
+                                            Shipping_State#shipping_state.port_inventory
+                                    }};
+                                false ->
+                                    error
+                            end
+                    end
             end
     end.
 
