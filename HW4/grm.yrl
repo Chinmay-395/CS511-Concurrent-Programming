@@ -1,7 +1,4 @@
-Header "%% Copyright (C)"
-       "%% @private"
-       "%% @Author Alejandro Russo".
-
+Header "%% Copyright (C)" "%% @private" "%% @Author Alejandro Russo".
 
 Nonterminals line ipnumber unit.
 
@@ -41,4 +38,4 @@ unit -> digit digit digit : ff('$1')++ff('$2')++ff('$3').
 
 Erlang code.
 
-ff({_,_,Content}) -> Content.
+ff({_, _, Content}) -> Content.

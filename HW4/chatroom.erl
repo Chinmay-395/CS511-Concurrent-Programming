@@ -1,5 +1,3 @@
-% Author: Ming Lin & Connor Haaf
-% I pledge my honor that I have abided by the Stevens honor system
 -module(chatroom).
 
 -include_lib("./defs.hrl").
@@ -43,8 +41,6 @@ loop(State) ->
     loop(NewState).
 
 %% This function should register a new client to this chatroom
-
-%% TODO
 do_register(State, Ref, ClientPID, ClientNick) ->
     UpdatedState =
         State#chat_st{
@@ -56,17 +52,11 @@ do_register(State, Ref, ClientPID, ClientNick) ->
     UpdatedState.
 
 %% This function should unregister a client from this chatroom
-
-%% TODO
 do_unregister(State, ClientPID) ->
-    %% reset registrations w unregistered client
     State#chat_st{registrations = maps:remove(ClientPID, State#chat_st.registrations)}.
 
 %% This function should update the nickname of specified client.
-
-%% TODO
 do_update_nick(State, ClientPID, NewNick) ->
-    %%update order: value to change, new value, and list
     State#chat_st{
         registrations =
             maps:update(ClientPID, NewNick, State#chat_st.registrations)
@@ -74,24 +64,20 @@ do_update_nick(State, ClientPID, NewNick) ->
 
 %% This function should update all clients in chatroom with new message
 %% (read assignment specs for details)
-
-%% TODO
 do_propegate_message(State, Ref, ClientPID, Message) ->
     ClientPID ! {self(), Ref, ack_msg},
-    Temp = fun(T, _X) -> T =/= ClientPID end,
-    %contain the clients corresponding to this value location
+    Temp = fun(T, _) -> T =/= ClientPID end,
     Clients =
         maps:keys(
             maps:filter(Temp, State#chat_st.registrations)
         ),
     {ok, NewNick} = maps:find(ClientPID, State#chat_st.registrations),
-    %list and collect the relevant values of new clients
     NewClients =
         fun(Z) ->
             Z ! {request, self(), Ref, {incoming_msg, NewNick, State#chat_st.name, Message}}
         end,
-    io:format("~w name: ~n", [State#chat_st.name]),
-    io:format("~w history: ~n", [State#chat_st.history]),
+    % io:format("~w name: ~n", [State#chat_st.name]),
+    % io:format("~w history: ~n", [State#chat_st.history]),
     lists:foreach(NewClients, Clients),
     #chat_st{
         name = State#chat_st.name,
