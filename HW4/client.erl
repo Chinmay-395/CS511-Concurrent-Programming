@@ -77,7 +77,8 @@ loop(State, Request, Ref) ->
             do_msg_send(State, Ref, ChatName, Message);
         %% GUI requests the nickname of client
         whoami ->
-            {{dummy_target, dummy_response}, State};
+            {State#cl_st.nick, State};
+        % {{dummy_target, dummy_response}, State};
         %% GUI requests to update nickname to Nick
         {nick, Nick} ->
             do_new_nick(State, Ref, Nick);
@@ -169,5 +170,6 @@ do_quit(State, Ref) ->
     whereis(server) ! {self(), Ref, quit},
     receive
         {_From, Ref, ack_quit} ->
-            {ack_quit, State}
-    end.
+            whereis(list_to_atom(State#cl_st.gui)) ! {self(), Ref, ack_quit}
+    end,
+    {ok_shutdown, State}.

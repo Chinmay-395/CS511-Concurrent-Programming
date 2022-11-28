@@ -427,7 +427,7 @@ join_ids(ClientId, Id) ->
 
 chatroom_id(ChatroomName) ->
     S = lists:foldl(
-        fun(S, Acc) -> io_lib:format("~p", [S]) ++ Acc end, "", lists:sublist(ChatroomName, 3)
+        fun(S, Acc) -> io_lib:format("~p", [S]) ++ Acc end, "", lists:sublist(ChatroomName, 15)
     ),
     list_to_integer(lists:flatten(S)).
 
