@@ -1,3 +1,4 @@
+% Chinmay Dali 20012692 & Sachin Devangan 20009725
 -module(client).
 
 -export([main/1, initial_state/2]).

@@ -44,3 +44,19 @@ Shipping_State#shipping_state.ships
 
 will have one message mailbox for an entire process
 ```
+
+What to check in promela using spin
+
+---
+
+Q1)Draw transition system
+
+Q2)Midterm question
+5 ATMs | 2 Employees | if the employees are going then customer cannot go in
+
+Q3)Stack using monitors
+
+Doubts to ask
+
+EB9
+verify with TA whether ex7(a,b,c) are correct and to check mutual exclusion on spin
