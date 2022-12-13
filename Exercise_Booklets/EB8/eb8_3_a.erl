@@ -10,14 +10,19 @@ client(S) ->
     S!{continue},
     S!{continue},
     S!{continue},
-    S!{counter}.
+    S!{counter,self()},
+    receive
+        {final,Val} ->
+            io:format("THE VAL ~w ~n",[Val])
+    end.
     
 server(CounterValue) ->
     % io:format("THE CURRENT VAL ~w ~n",[CounterValue]),
     receive
         {continue} ->
             server(CounterValue+1);
-        {counter} ->
-            io:format("THE COUNTER ~w ~n",[CounterValue]),
-            server(CounterValue)
+        {counter,From} ->
+            % io:format("THE COUNTER ~w ~n",[CounterValue]),
+            From!{final,CounterValue}
+            % server(CounterValue)
     end.
