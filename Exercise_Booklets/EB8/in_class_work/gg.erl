@@ -12,16 +12,6 @@ servlet(N) ->
                     servlet(N)
             end
     end.
-
-%% servlet(N) ->
-%%     receive
-%% 	{From,G,guess} when G==N ->
-%% 		    From!{gotIt};
-%% 	{From,G,guess} when G/=N ->
-%% 		    From!{tryAgain},
-%% 		    servlet(N)
-%%     end.
-
 server() ->
     receive
         {From, start} ->
