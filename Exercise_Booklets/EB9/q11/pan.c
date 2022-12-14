@@ -491,10 +491,10 @@ int _;	/* predefined write-only variable */
 #endif
 
 short src_ln2 [] = {
-	  0,  81,  81,  82,  83,  81,  84,  84, 
-	 84,  86,  84,  87,  87,  88,  87,  90, 
-	 90,  90,  93,  90,  93,  93,  94,  93, 
-	 95,  95,  95,  96,  95,  86,  97,   0, };
+	  0,  78,  78,  79,  80,  78,  81,  81, 
+	 81,  83,  81,  84,  84,  85,  84,  87, 
+	 87,  87,  90,  87,  90,  90,  91,  90, 
+	 92,  92,  92,  93,  92,  83,  94,   0, };
 S_F_MAP src_file2 [] = {
 	{ "-", 0, 0 },
 	{ "q11.pml", 1, 30 },
@@ -508,8 +508,8 @@ uchar reached2 [] = {
 uchar *loopstate2;
 
 short src_ln1 [] = {
-	  0,  15,  16,  14,  13,  20,  19,  64, 
-	 75,  64,  75,   0, };
+	  0,  16,  17,  15,  14,  21,  20,  66, 
+	 72,  66,  72,   0, };
 S_F_MAP src_file1 [] = {
 	{ "-", 0, 0 },
 	{ "q11.pml", 1, 10 },
@@ -521,12 +521,12 @@ uchar reached1 [] = {
 uchar *loopstate1;
 
 short src_ln0 [] = {
-	  0,  15,  16,  14,  13,  27,  28,  29, 
-	 20,  19,  15,  16,  14,  13,  15,  16, 
-	 14,  13,  36,  37,  38,  20,  19,  20, 
-	 19,  15,  16,  14,  13,  15,  16,  14, 
-	 13,  50,  51,  52,  20,  19,  20,  19, 
-	 15,  16,  14,  13,  20,  19,  59,   0, };
+	  0,  16,  17,  15,  14,  28,  29,  30, 
+	 21,  20,  16,  17,  15,  14,  16,  17, 
+	 15,  14,  37,  38,  39,  21,  20,  21, 
+	 20,  16,  17,  15,  14,  16,  17,  15, 
+	 14,  52,  53,  54,  21,  20,  21,  20, 
+	 16,  17,  15,  14,  21,  20,  61,   0, };
 S_F_MAP src_file0 [] = {
 	{ "-", 0, 0 },
 	{ "q11.pml", 1, 46 },
@@ -12414,9 +12414,9 @@ iniglobals(int calling_pid)
 		now.station0 = 1;
 		now.station1 = 1;
 		now.station2 = 1;
-		now.stationAccquired[0] = 0;
-		now.stationAccquired[1] = 0;
-		now.stationAccquired[2] = 0;
+		now.c0 = 0;
+		now.c1 = 0;
+		now.c2 = 0;
 #ifdef VAR_RANGES
 	{	int l_in;
 		for (l_in = 0; l_in < 3; l_in++)
@@ -12433,12 +12433,9 @@ iniglobals(int calling_pid)
 		logval("station0", now.station0);
 		logval("station1", now.station1);
 		logval("station2", now.station2);
-	{	int l_in;
-		for (l_in = 0; l_in < 3; l_in++)
-		{
-			logval("stationAccquired[l_in]", now.stationAccquired[l_in]);
-		}
-	}
+		logval("c0", now.c0);
+		logval("c1", now.c1);
+		logval("c2", now.c2);
 #endif
 }
 
@@ -14151,12 +14148,9 @@ c_globals(void)
 	printf("	byte   station0:	%d\n", now.station0);
 	printf("	byte   station1:	%d\n", now.station1);
 	printf("	byte   station2:	%d\n", now.station2);
-	{	int l_in;
-		for (l_in = 0; l_in < 3; l_in++)
-		{
-			printf("	byte   stationAccquired[%d]:	%d\n", l_in, now.stationAccquired[l_in]);
-		}
-	}
+	printf("	byte   c0:	%d\n", now.c0);
+	printf("	byte   c1:	%d\n", now.c1);
+	printf("	byte   c2:	%d\n", now.c2);
 }
 void
 c_locals(int pid, int tp)

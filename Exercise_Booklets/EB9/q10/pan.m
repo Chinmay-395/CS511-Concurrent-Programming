@@ -20,123 +20,19 @@
 		_m = 3; goto P999;
 
 		 /* PROC Patriots */
-	case 3: // STATE 1 - q10.pml:8 - [((mutex>0))] (5:0:1 - 1)
+	case 3: // STATE 1 - q10.pml:28 - [nPats = (nPats+1)] (0:0:1 - 1)
 		IfNotBlocked
 		reached[1][1] = 1;
-		if (!((((int)now.mutex)>0)))
-			continue;
-		/* merge: mutex = (mutex-1)(0, 2, 5) */
+		(trpt+1)->bup.oval = ((int)now.nPats);
+		now.nPats = (((int)now.nPats)+1);
+#ifdef VAR_RANGES
+		logval("nPats", ((int)now.nPats));
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 4: // STATE 2 - q10.pml:14 - [ticket = (ticket+1)] (0:0:1 - 1)
+		IfNotBlocked
 		reached[1][2] = 1;
-		(trpt+1)->bup.oval = ((int)now.mutex);
-		now.mutex = (((int)now.mutex)-1);
-#ifdef VAR_RANGES
-		logval("mutex", ((int)now.mutex));
-#endif
-		;
-		_m = 3; goto P999; /* 1 */
-	case 4: // STATE 5 - q10.pml:23 - [criticalPats = (criticalPats+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][5] = 1;
-		(trpt+1)->bup.oval = ((int)now.criticalPats);
-		now.criticalPats = (((int)now.criticalPats)+1);
-#ifdef VAR_RANGES
-		logval("criticalPats", ((int)now.criticalPats));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 5: // STATE 6 - q10.pml:8 - [((ticket>0))] (10:0:1 - 1)
-		IfNotBlocked
-		reached[1][6] = 1;
-		if (!((((int)now.ticket)>0)))
-			continue;
-		/* merge: ticket = (ticket-1)(0, 7, 10) */
-		reached[1][7] = 1;
-		(trpt+1)->bup.oval = ((int)now.ticket);
-		now.ticket = (((int)now.ticket)-1);
-#ifdef VAR_RANGES
-		logval("ticket", ((int)now.ticket));
-#endif
-		;
-		_m = 3; goto P999; /* 1 */
-	case 6: // STATE 10 - q10.pml:25 - [criticalJets = (criticalJets+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][10] = 1;
-		(trpt+1)->bup.oval = ((int)now.criticalJets);
-		now.criticalJets = (((int)now.criticalJets)+1);
-#ifdef VAR_RANGES
-		logval("criticalJets", ((int)now.criticalJets));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 7: // STATE 11 - q10.pml:8 - [((ticket>0))] (15:0:1 - 1)
-		IfNotBlocked
-		reached[1][11] = 1;
-		if (!((((int)now.ticket)>0)))
-			continue;
-		/* merge: ticket = (ticket-1)(0, 12, 15) */
-		reached[1][12] = 1;
-		(trpt+1)->bup.oval = ((int)now.ticket);
-		now.ticket = (((int)now.ticket)-1);
-#ifdef VAR_RANGES
-		logval("ticket", ((int)now.ticket));
-#endif
-		;
-		_m = 3; goto P999; /* 1 */
-	case 8: // STATE 15 - q10.pml:27 - [criticalJets = (criticalJets+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][15] = 1;
-		(trpt+1)->bup.oval = ((int)now.criticalJets);
-		now.criticalJets = (((int)now.criticalJets)+1);
-#ifdef VAR_RANGES
-		logval("criticalJets", ((int)now.criticalJets));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 9: // STATE 16 - q10.pml:28 - [assert(((2*criticalJets)<=criticalPats))] (0:0:0 - 1)
-		IfNotBlocked
-		reached[1][16] = 1;
-		spin_assert(((2*((int)now.criticalJets))<=((int)now.criticalPats)), "((2*criticalJets)<=criticalPats)", II, tt, t);
-		_m = 3; goto P999; /* 0 */
-	case 10: // STATE 17 - q10.pml:29 - [criticalPats = (criticalPats-1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][17] = 1;
-		(trpt+1)->bup.oval = ((int)now.criticalPats);
-		now.criticalPats = (((int)now.criticalPats)-1);
-#ifdef VAR_RANGES
-		logval("criticalPats", ((int)now.criticalPats));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 11: // STATE 18 - q10.pml:13 - [mutex = (mutex+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[1][18] = 1;
-		(trpt+1)->bup.oval = ((int)now.mutex);
-		now.mutex = (((int)now.mutex)+1);
-#ifdef VAR_RANGES
-		logval("mutex", ((int)now.mutex));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 12: // STATE 20 - q10.pml:32 - [-end-] (0:0:0 - 1)
-		IfNotBlocked
-		reached[1][20] = 1;
-		if (!delproc(1, II)) continue;
-		_m = 3; goto P999; /* 0 */
-
-		 /* PROC Jets */
-	case 13: // STATE 1 - q10.pml:17 - [criticalJets = (criticalJets-1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[0][1] = 1;
-		(trpt+1)->bup.oval = ((int)now.criticalJets);
-		now.criticalJets = (((int)now.criticalJets)-1);
-#ifdef VAR_RANGES
-		logval("criticalJets", ((int)now.criticalJets));
-#endif
-		;
-		_m = 3; goto P999; /* 0 */
-	case 14: // STATE 2 - q10.pml:13 - [ticket = (ticket+1)] (0:0:1 - 1)
-		IfNotBlocked
-		reached[0][2] = 1;
 		(trpt+1)->bup.oval = ((int)now.ticket);
 		now.ticket = (((int)now.ticket)+1);
 #ifdef VAR_RANGES
@@ -144,9 +40,93 @@
 #endif
 		;
 		_m = 3; goto P999; /* 0 */
-	case 15: // STATE 4 - q10.pml:19 - [-end-] (0:0:0 - 1)
+	case 5: // STATE 4 - q10.pml:30 - [printf('J: %d, P: %d\\n',nJets,nPats)] (0:0:0 - 1)
 		IfNotBlocked
-		reached[0][4] = 1;
+		reached[1][4] = 1;
+		Printf("J: %d, P: %d\n", ((int)now.nJets), ((int)now.nPats));
+		_m = 3; goto P999; /* 0 */
+	case 6: // STATE 5 - q10.pml:31 - [-end-] (0:0:0 - 1)
+		IfNotBlocked
+		reached[1][5] = 1;
+		if (!delproc(1, II)) continue;
+		_m = 3; goto P999; /* 0 */
+
+		 /* PROC Jets */
+	case 7: // STATE 1 - q10.pml:9 - [((mutex>0))] (8:0:1 - 1)
+		IfNotBlocked
+		reached[0][1] = 1;
+		if (!((((int)now.mutex)>0)))
+			continue;
+		/* merge: mutex = (mutex-1)(0, 2, 8) */
+		reached[0][2] = 1;
+		(trpt+1)->bup.oval = ((int)now.mutex);
+		now.mutex = (((int)now.mutex)-1);
+#ifdef VAR_RANGES
+		logval("mutex", ((int)now.mutex));
+#endif
+		;
+		_m = 3; goto P999; /* 1 */
+	case 8: // STATE 5 - q10.pml:9 - [((ticket>0))] (12:0:1 - 1)
+		IfNotBlocked
+		reached[0][5] = 1;
+		if (!((((int)now.ticket)>0)))
+			continue;
+		/* merge: ticket = (ticket-1)(0, 6, 12) */
+		reached[0][6] = 1;
+		(trpt+1)->bup.oval = ((int)now.ticket);
+		now.ticket = (((int)now.ticket)-1);
+#ifdef VAR_RANGES
+		logval("ticket", ((int)now.ticket));
+#endif
+		;
+		_m = 3; goto P999; /* 1 */
+	case 9: // STATE 9 - q10.pml:9 - [((ticket>0))] (14:0:1 - 1)
+		IfNotBlocked
+		reached[0][9] = 1;
+		if (!((((int)now.ticket)>0)))
+			continue;
+		/* merge: ticket = (ticket-1)(0, 10, 14) */
+		reached[0][10] = 1;
+		(trpt+1)->bup.oval = ((int)now.ticket);
+		now.ticket = (((int)now.ticket)-1);
+#ifdef VAR_RANGES
+		logval("ticket", ((int)now.ticket));
+#endif
+		;
+		_m = 3; goto P999; /* 1 */
+	case 10: // STATE 13 - q10.pml:14 - [mutex = (mutex+1)] (0:0:1 - 1)
+		IfNotBlocked
+		reached[0][13] = 1;
+		(trpt+1)->bup.oval = ((int)now.mutex);
+		now.mutex = (((int)now.mutex)+1);
+#ifdef VAR_RANGES
+		logval("mutex", ((int)now.mutex));
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 11: // STATE 15 - q10.pml:22 - [nJets = (nJets+1)] (0:0:1 - 1)
+		IfNotBlocked
+		reached[0][15] = 1;
+		(trpt+1)->bup.oval = ((int)now.nJets);
+		now.nJets = (((int)now.nJets)+1);
+#ifdef VAR_RANGES
+		logval("nJets", ((int)now.nJets));
+#endif
+		;
+		_m = 3; goto P999; /* 0 */
+	case 12: // STATE 16 - q10.pml:23 - [printf('J: %d, P: %d\\n',nJets,nPats)] (0:0:0 - 1)
+		IfNotBlocked
+		reached[0][16] = 1;
+		Printf("J: %d, P: %d\n", ((int)now.nJets), ((int)now.nPats));
+		_m = 3; goto P999; /* 0 */
+	case 13: // STATE 17 - q10.pml:24 - [assert(((2*nJets)<=nPats))] (0:0:0 - 1)
+		IfNotBlocked
+		reached[0][17] = 1;
+		spin_assert(((2*((int)now.nJets))<=((int)now.nPats)), "((2*nJets)<=nPats)", II, tt, t);
+		_m = 3; goto P999; /* 0 */
+	case 14: // STATE 18 - q10.pml:25 - [-end-] (0:0:0 - 1)
+		IfNotBlocked
+		reached[0][18] = 1;
 		if (!delproc(1, II)) continue;
 		_m = 3; goto P999; /* 0 */
 	case  _T5:	/* np_ */

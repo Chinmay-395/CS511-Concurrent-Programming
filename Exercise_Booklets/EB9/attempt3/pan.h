@@ -2,7 +2,7 @@
 #define PAN_H
 
 #define SpinVersion	"Spin Version 6.5.2 -- 6 December 2019"
-#define PanSource	"q11.pml"
+#define PanSource	"dekker (1).pml"
 
 #define G_long	8
 #define G_int	4
@@ -17,7 +17,7 @@
 #endif
 
 #ifdef BFS_PAR
-	#define NRUNS	1
+	#define NRUNS	0
 	#ifndef BFS
 		#define BFS
 	#endif
@@ -120,7 +120,7 @@
 #endif
 #ifdef NP
 	#define HAS_NP	2
-	#define VERI	3	/* np_ */
+	#define VERI	2	/* np_ */
 #endif
 #if defined(NOCLAIM) && defined(NP)
 	#undef NOCLAIM
@@ -132,31 +132,24 @@ typedef struct S_F_MAP {
 	int upto;
 } S_F_MAP;
 
-#define _nstates2	31	/* :init: */
-#define minseq2	56
-#define maxseq2	85
-#define _endstate2	30
+#define _nstates1	39	/* Feline */
+#define minseq1	38
+#define maxseq1	75
+#define _endstate1	38
 
-#define _nstates1	11	/* Machine */
-#define minseq1	46
-#define maxseq1	55
-#define _endstate1	10
-
-#define _nstates0	47	/* Car */
+#define _nstates0	39	/* Mouse */
 #define minseq0	0
-#define maxseq0	45
-#define _endstate0	46
+#define maxseq0	37
+#define _endstate0	38
 
-extern short src_ln2[];
 extern short src_ln1[];
 extern short src_ln0[];
-extern S_F_MAP src_file2[];
 extern S_F_MAP src_file1[];
 extern S_F_MAP src_file0[];
 
 #define T_ID	unsigned char
-#define _T5	42
-#define _T2	43
+#define _T5	31
+#define _T2	32
 #define WS		8 /* word size in bytes */
 #define SYNC	0
 #define ASYNC	0
@@ -171,32 +164,19 @@ extern S_F_MAP src_file0[];
 	#endif
 #endif
 
-#define Pinit	((P2 *)_this)
-typedef struct P2 { /* :init: */
+#define PFeline	((P1 *)_this)
+typedef struct P1 { /* Feline */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
 	unsigned _p   : 7; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
-	uchar i;
-} P2;
-#define Air2	(sizeof(P2) - Offsetof(P2, i) - 1*sizeof(uchar))
-
-#define PMachine	((P1 *)_this)
-typedef struct P1 { /* Machine */
-	unsigned _pid : 8;  /* 0..255 */
-	unsigned _t   : 3; /* proctype */
-	unsigned _p   : 7; /* state    */
-#ifdef HAS_PRIORITY
-	unsigned _priority : 8; /* 0..255 */
-#endif
-	int i;
 } P1;
-#define Air1	(sizeof(P1) - Offsetof(P1, i) - 1*sizeof(int))
+#define Air1	(sizeof(P1) - 3)
 
-#define PCar	((P0 *)_this)
-typedef struct P0 { /* Car */
+#define PMouse	((P0 *)_this)
+typedef struct P0 { /* Mouse */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
 	unsigned _p   : 7; /* state    */
@@ -206,15 +186,15 @@ typedef struct P0 { /* Car */
 } P0;
 #define Air0	(sizeof(P0) - 3)
 
-typedef struct P3 { /* np_ */
+typedef struct P2 { /* np_ */
 	unsigned _pid : 8;  /* 0..255 */
 	unsigned _t   : 3; /* proctype */
 	unsigned _p   : 7; /* state    */
 #ifdef HAS_PRIORITY
 	unsigned _priority : 8; /* 0..255 */
 #endif
-} P3;
-#define Air3	(sizeof(P3) - 3)
+} P2;
+#define Air2	(sizeof(P2) - 3)
 
 #define Pclaim	P0
 #ifndef NCLAIMS
@@ -406,14 +386,11 @@ typedef struct State {
 		unsigned short _event;
 	#endif
 #endif
-	uchar permToProcess[3];
-	uchar doneProcessing[3];
-	uchar station0;
-	uchar station1;
-	uchar station2;
-	uchar c0;
-	uchar c1;
-	uchar c2;
+	uchar mice;
+	uchar felines;
+	uchar mutexMice;
+	uchar mutexFelines;
+	uchar mutex;
 #ifdef TRIX
 	/* room for 512 proc+chan ptrs, + safety margin */
 	char *_ids_[MAXPROC+MAXQ+4];
@@ -438,13 +415,12 @@ typedef struct TRIX_v6 {
 #define FORWARD_MOVES	"pan.m"
 #define BACKWARD_MOVES	"pan.b"
 #define TRANSITIONS	"pan.t"
-#define _NP_	3
-#define _nstates3	3 /* np_ */
-#define _endstate3	2 /* np_ */
+#define _NP_	2
+#define _nstates2	3 /* np_ */
+#define _endstate2	2 /* np_ */
 
-#define _start3	0 /* np_ */
-#define _start2	1
-#define _start1	7
+#define _start2	0 /* np_ */
+#define _start1	4
 #define _start0	4
 #ifdef NP
 	#define ACCEPT_LAB	1 /* at least 1 in np_ */
@@ -795,7 +771,7 @@ typedef struct BFS_State {
 
 void qsend(int, int, int);
 
-#define Addproc(x,y)	addproc(256, y, x, 0)
+#define Addproc(x,y)	addproc(256, y, x)
 #define LOCAL	1
 #define Q_FULL_F	2
 #define Q_EMPT_F	3
@@ -805,7 +781,7 @@ void qsend(int, int, int);
 #define GLOBAL	7
 #define BAD	8
 #define ALPHA_F	9
-#define NTRANS	44
+#define NTRANS	33
 #if defined(BFS_PAR) || NCORE>1
 	void e_critical(int);
 	void x_critical(int);

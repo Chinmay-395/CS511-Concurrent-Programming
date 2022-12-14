@@ -98,9 +98,9 @@ settable(void)
 	trans[0][1]	= settr(0,4,5,20,20,"((station0>0))", 1, 2, 0); /* m: 2 -> 5,0 */
 	reached0[2] = 1;
 	trans[0][2]	= settr(0,0,0,0,0,"station0 = (station0-1)",0,0,0);
-	trans[0][5]	= settr(4,0,6,21,21,"stationAccquired[0] = (stationAccquired[0]+1)", 1, 2, 0);
-	trans[0][6]	= settr(5,0,7,22,0,"assert((stationAccquired[0]==1))", 1, 2, 0);
-	trans[0][7]	= settr(6,0,9,23,23,"stationAccquired[0] = (stationAccquired[0]-1)", 1, 2, 0);
+	trans[0][5]	= settr(4,0,6,21,21,"c0 = (c0+1)", 1, 2, 0);
+	trans[0][6]	= settr(5,0,7,22,0,"assert((c0==1))", 1, 2, 0);
+	trans[0][7]	= settr(6,0,9,23,23,"c0 = (c0-1)", 1, 2, 0);
 	T = trans[ 0][9] = settr(8,0,0,0,0,"sub-sequence", 0, 2, 0);
 	T->nxt	= settr(8,0,8,0,0,"sub-sequence", 0, 2, 0);
 	trans[0][8]	= settr(7,0,13,24,24,"permToProcess[0] = (permToProcess[0]+1)", 1, 2, 0);
@@ -118,9 +118,9 @@ settable(void)
 	trans[0][14]	= settr(13,4,18,26,26,"((station1>0))", 1, 2, 0); /* m: 15 -> 18,0 */
 	reached0[15] = 1;
 	trans[0][15]	= settr(0,0,0,0,0,"station1 = (station1-1)",0,0,0);
-	trans[0][18]	= settr(17,0,19,27,27,"stationAccquired[1] = (stationAccquired[1]+1)", 1, 2, 0);
-	trans[0][19]	= settr(18,0,20,28,0,"assert((stationAccquired[1]==1))", 1, 2, 0);
-	trans[0][20]	= settr(19,0,22,29,29,"stationAccquired[1] = (stationAccquired[1]-1)", 1, 2, 0);
+	trans[0][18]	= settr(17,0,19,27,27,"c1 = (c1+1)", 1, 2, 0);
+	trans[0][19]	= settr(18,0,20,28,0,"assert((c1==1))", 1, 2, 0);
+	trans[0][20]	= settr(19,0,22,29,29,"c1 = (c1-1)", 1, 2, 0);
 	T = trans[ 0][22] = settr(21,0,0,0,0,"sub-sequence", 0, 2, 0);
 	T->nxt	= settr(21,0,21,0,0,"sub-sequence", 0, 2, 0);
 	trans[0][21]	= settr(20,0,24,30,30,"station0 = (station0+1)", 1, 2, 0);
@@ -141,9 +141,9 @@ settable(void)
 	trans[0][29]	= settr(28,4,33,33,33,"((station2>0))", 1, 2, 0); /* m: 30 -> 33,0 */
 	reached0[30] = 1;
 	trans[0][30]	= settr(0,0,0,0,0,"station2 = (station2-1)",0,0,0);
-	trans[0][33]	= settr(32,0,34,34,34,"stationAccquired[2] = (stationAccquired[2]+1)", 1, 2, 0);
-	trans[0][34]	= settr(33,0,35,35,0,"assert((stationAccquired[2]==1))", 1, 2, 0);
-	trans[0][35]	= settr(34,0,37,36,36,"stationAccquired[2] = (stationAccquired[2]-1)", 1, 2, 0);
+	trans[0][33]	= settr(32,0,34,34,34,"c2 = (c2+1)", 1, 2, 0);
+	trans[0][34]	= settr(33,0,35,35,0,"assert((c2==1))", 1, 2, 0);
+	trans[0][35]	= settr(34,0,37,36,36,"c2 = (c2-1)", 1, 2, 0);
 	T = trans[ 0][37] = settr(36,0,0,0,0,"sub-sequence", 0, 2, 0);
 	T->nxt	= settr(36,0,36,0,0,"sub-sequence", 0, 2, 0);
 	trans[0][36]	= settr(35,0,39,37,37,"station1 = (station1+1)", 1, 2, 0);

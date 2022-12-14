@@ -110,7 +110,7 @@
 
 	case 21: // STATE 5
 		;
-		now.stationAccquired[0] = trpt->bup.oval;
+		now.c0 = trpt->bup.oval;
 		;
 		goto R999;
 ;
@@ -118,7 +118,7 @@
 		
 	case 23: // STATE 7
 		;
-		now.stationAccquired[0] = trpt->bup.oval;
+		now.c0 = trpt->bup.oval;
 		;
 		goto R999;
 
@@ -142,7 +142,7 @@
 
 	case 27: // STATE 18
 		;
-		now.stationAccquired[1] = trpt->bup.oval;
+		now.c1 = trpt->bup.oval;
 		;
 		goto R999;
 ;
@@ -150,7 +150,7 @@
 		
 	case 29: // STATE 20
 		;
-		now.stationAccquired[1] = trpt->bup.oval;
+		now.c1 = trpt->bup.oval;
 		;
 		goto R999;
 
@@ -180,7 +180,7 @@
 
 	case 34: // STATE 33
 		;
-		now.stationAccquired[2] = trpt->bup.oval;
+		now.c2 = trpt->bup.oval;
 		;
 		goto R999;
 ;
@@ -188,7 +188,7 @@
 		
 	case 36: // STATE 35
 		;
-		now.stationAccquired[2] = trpt->bup.oval;
+		now.c2 = trpt->bup.oval;
 		;
 		goto R999;
 
