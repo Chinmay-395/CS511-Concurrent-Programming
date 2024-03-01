@@ -17,6 +17,17 @@ Architecture
 Technologies Used
 **Erlang/OTP:** The application is entirely written in Erlang, leveraging its OTP framework for managing the application's architecture and concurrency model.
 
+# Architecture diagram
+
+![layout of process and connects](https://github.com/Chinmay-395/CS511-Concurrent-Programming/blob/deploy/tinyChat/figure1.png)
+
+<br>
+<p>The architecture emphasizes concurrent operations and message passing. The GUI acts as the interface for user commands, which are processed by clients. Clients interact with the server to manage their presence in chatrooms and with chatrooms directly for messaging. The server acts as a centralized point for managing the overall state of the system, including the registration of clients to chatrooms and the existence of chatrooms themselves. Chatrooms are responsible for managing active conversations and distributing messages among participants.
+
+This architecture leverages Erlang's strengths in handling concurrency, distribution, and message passing, enabling real-time communication and interaction among users in a distributed chat system.
+
+</p>
+
 ## Getting Started
 
 To run TinyChat, ensure you have Erlang/OTP installed on your system. Clone the repository, navigate to the project directory, and start the Erlang shell with erl. Compile the modules and start the server with provided scripts in the documentation.
@@ -35,7 +46,7 @@ this will create a GUI pop-window consisting of system-tab
 | some string of text | send a message “some string of text” to chatroom who’s tab is currently active/open.            |
 | /quit               | quit. Just that user’s GUI and client exit, while server and chatrooms stay running.            |
 
-#
+# Modules
 
 TinyChat consists of these following primary actors or process types and their corresponding Erlang modules:
 
@@ -61,3 +72,5 @@ TinyChat consists of these following primary actors or process types and their c
     <p>In addition to these four primary actors, TinyChat includes a main.erl module to bootstrap the application. This module initializes the system, starting the server and GUI processes, and facilitates the dynamic creation of chatrooms as users join them.</p>
 </li>
 </ul>
+
+![example](https://github.com/Chinmay-395/CS511-Concurrent-Programming/blob/deploy/tinyChat/chat_example.png)
