@@ -6,15 +6,15 @@ TinyChat is a lightweight, highly concurrent chat application developed in Erlan
 
 ## Features
 
-**Client Management:** Users can connect/disconnect, change their nicknames, and join or leave chatrooms.
-**Chatrooms:** Supports multiple chatrooms with the ability to broadcast messages to all members.
-**Concurrency:** Utilizes Erlang's lightweight processes for handling multiple users and chatrooms concurrently.
+**Client Management:** Users can connect/disconnect, change their nicknames, and join or leave chatrooms.<br/>
+**Chatrooms:** Supports multiple chatrooms with the ability to broadcast messages to all members.<br/>
+**Concurrency:** Utilizes Erlang's lightweight processes for handling multiple users and chatrooms concurrently.<br/>
 **Real-time Communication:** Messages are delivered in real-time across clients and chatrooms.
-Architecture
-**Server:** Acts as the central node managing client connections, chatroom creation, and routing messages.
-**Clients:** Connect to the server, sending and receiving messages, and interacting with chatrooms.
+Architecture<br/>
+**Server:** Acts as the central node managing client connections, chatroom creation, and routing messages.<br/>
+**Clients:** Connect to the server, sending and receiving messages, and interacting with chatrooms.<br/>
 **Chatrooms:** Managed by the server, allowing multiple clients to join, leave, and communicate.
-Technologies Used
+Technologies Used<br/>
 **Erlang/OTP:** The application is entirely written in Erlang, leveraging its OTP framework for managing the application's architecture and concurrency model.
 
 # Architecture diagram
